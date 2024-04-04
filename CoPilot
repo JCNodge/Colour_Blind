@@ -1,0 +1,39 @@
+# content_script.js
+
+// Define problematic color pairs
+const problematicColors = [
+  { name: 'red', hex: '#FF0000' },
+  { name: 'green', hex: '#00FF00' },
+  { name: 'blue', hex: '#0000FF' },
+  { name: 'yellow', hex: '#FFFF00' },
+];
+
+// Calculate color distance in CIE LAB space
+function getColorDistance(color1, color2) {
+  // Implement your color distance calculation here (e.g., using colormath)
+  // Return a numeric value representing the distance
+}
+
+// Check if colors are too close
+function areColorsTooClose(color1, color2) {
+  const distanceThreshold = 20; // Adjust as needed
+  const distance = getColorDistance(color1, color2);
+  return distance < distanceThreshold;
+}
+
+// Scan the page for problematic colors
+function scanPageForColors() {
+  const elements = document.querySelectorAll('*');
+  elements.forEach((element) => {
+    const computedStyle = window.getComputedStyle(element);
+    const bgColor = computedStyle.backgroundColor;
+    problematicColors.forEach((color) => {
+      if (bgColor === color.hex || areColorsTooClose(bgColor, color.hex)) {
+        alert(`Color issue detected: ${color.name} background`);
+      }
+    });
+  });
+}
+
+// Run the scan when the page loads
+window.addEventListener('load', scanPageForColors);
